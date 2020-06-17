@@ -32,32 +32,58 @@ const adv = document.querySelectorAll('.promo__adv img'),
     genre = poster.querySelector('.promo__genre'),
     movieList = document.querySelector('.promo__interactive-list'),
     addForm = document.querySelector('form.add'),
-    addInput = addForm.querySelector('adding__input'),
+    addInput = addForm.querySelector('.adding__input'),
     checkbox = addForm.querySelector('input[type="checkbox"]');
+    // addButton = addForm.querySelector("button");
 
+// ОСНОВА
 addForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    let textForm = addInput.value;
-    if (textForm) {
-        movieDB.movies.push(textForm);
+    const newFilm = addInput.value;
+
+    if (newFilm) {
+        if (newFilm.length > 21) {
+            let NewFilm = newFilm.substring(0, 21) + '...';
+            movieDB.movies.push(NewFilm);
+            addingFilm();
+            addForm.reset();
+        } else {
+            movieDB.movies.push(newFilm);
+            addingFilm();
+            addForm.reset();
+        }
     } 
 });
 
-adv.forEach(item => {
-    item.remove();
-});
+function deleteAdv() {
+    adv.forEach(item => {
+        item.remove();
+    });
+}
 
-genre.textContent = "Драма";
+function editGenre() {
+    genre.textContent = "Драма";
+}
 
-poster.style.backgroundImage = 'url("img/bg.jpg")';
+function editPoster() {
+    poster.style.backgroundImage = 'url("img/bg.jpg")';
+}
 
-movieList.innerHTML = ''; // очищение элемента (блока)
-movieDB.movies.sort(); // сортировка по алфовиту
-
-movieDB.movies.forEach((film, i) => { // film - каждый отдельный фильм, i - порядковый номер фильма
-    movieList.innerHTML += `
+function addingFilm() {
+    movieList.innerHTML = ''; // очищение элемента (блока)
+    movieDB.movies.sort();
+    movieDB.movies.forEach((film, i) => { // film - каждый отдельный фильм, i - порядковый номер фильма
+        movieList.innerHTML += `
         <li class="promo__interactive-item">${i + 1} ${film}
             <div class="delete"></div>
         </li>
     `;
-});
+    });
+}
+
+
+addingFilm();
+editGenre();
+editPoster();
+deleteAdv();
+    
