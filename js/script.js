@@ -33,8 +33,15 @@ const adv = document.querySelectorAll('.promo__adv img'),
     movieList = document.querySelector('.promo__interactive-list'),
     addForm = document.querySelector('form.add'),
     addInput = addForm.querySelector('adding__input'),
-    checkbox = addForm.querySelector('input[type="checkbox"]'),
-    addButton = addForm.querySelector('button');
+    checkbox = addForm.querySelector('input[type="checkbox"]');
+
+addForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let textForm = addInput.value;
+    if (textForm) {
+        movieDB.movies.push(textForm);
+    } 
+});
 
 adv.forEach(item => {
     item.remove();
@@ -54,7 +61,3 @@ movieDB.movies.forEach((film, i) => { // film - каждый отдельный 
         </li>
     `;
 });
-
-
-
-// fdsddddddddddddddddddddddddddfsdfsd
