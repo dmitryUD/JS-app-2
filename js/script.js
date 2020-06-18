@@ -41,16 +41,26 @@ document.addEventListener('DOMContentLoaded', () => {
     addForm.addEventListener('submit', (event) => {
         event.preventDefault(); // отменить стандартное поведение браузера - не перезагружать страницу
 
-        const newFilm = addInput.value; // содержится то, что ввел пользователь
+        let newFilm = addInput.value; // содержится то, что ввел пользователь
         const favorite = checkbox.checked;
 
         if (newFilm) {
+
+            if (newFilm.length > 21) {
+                newFilm = `${newFilm.substring(0,22)}...`;
+            }
+
+            if (favorite) {
+                console.log("Добавляем любимый фильм");
+            }
+
             movieDB.movies.push(newFilm); // добавить фильм в конец массива
             sortArr(movieDB.movies); // отсортировать массив
 
             createMovieList(movieDB.movies, movieList);
         }
-        event.target.reset();
+
+        event.target.reset(); // обращение к элементу, на котором происходит событие, и сброс формы
     });
 
     const deleteAdv = (arr) => {
@@ -70,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createMovieList(films, parent) {
         parent.innerHTML = '';
+        sortArr(films);
 
         films.forEach((film, i) => { // film - каждый отдельный фильм, i - порядковый номер фильма
             parent.innerHTML += `
@@ -78,13 +89,18 @@ document.addEventListener('DOMContentLoaded', () => {
         </li>
     `;
         });
-    }
 
+        document.querySelectorAll(".delete").forEach((btn, i) => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
+                movieDB.movies.splice(i, 1);
+                createMovieList(films, parent);
+            });
+        });
+    }
     deleteAdv(adv);
     makeChanges();
-    sortArr(movieDB.movies);
     createMovieList(movieDB.movies, movieList);
-
 });
 
 
