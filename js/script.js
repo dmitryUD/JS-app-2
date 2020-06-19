@@ -38,26 +38,25 @@ document.addEventListener('DOMContentLoaded', () => {
         checkbox = addForm.querySelector('[type="checkbox"]');
     // addButton = addForm.querySelector("button");
 
-    // ОСНОВА
     addForm.addEventListener('submit', (event) => {
         event.preventDefault(); // отмена стандартного поведения браузера
 
-        const newFilm = addInput.value;
+        let newFilm = addInput.value;
         const favorite = checkbox.checked;
 
         if (newFilm) {
             if (newFilm.length > 21) {
-                let NewFilm = newFilm.substring(0, 21) + '...';
-                movieDB.movies.push(NewFilm);
-                createMovieList(movieDB.movies, movieList);
-                sortArr(movieDB.movies);
-                addForm.reset();
-            } else {
-                movieDB.movies.push(newFilm);
-                createMovieList(movieDB.movies, movieList);
-                addForm.reset();
+                newFilm = `${newFilm.substring(0,22)}...`;
             }
+            if (favorite) {
+                alert('Добавляем новый фильм');
+            }
+
+            movieDB.movies.push(newFilm);
+            sortArr(movieDB.movies);
+            createMovieList(movieDB.movies, movieList);
         }
+        event.target.reset();
     });
 
     const deleteAdv = (arr) => {
@@ -77,12 +76,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createMovieList(films, parent) {
         parent.innerHTML = '';
+        sortArr(films);
         films.forEach((film, i) => { // film - каждый отдельный фильм, i - порядковый номер фильма
             parent.innerHTML += `
         <li class="promo__interactive-item">${i + 1} ${film}
             <div class="delete"></div>
         </li>
     `;
+        });
+
+        document.querySelectorAll(".delete").forEach((btn, i) => {
+            btn.addEventListener('click', () => {
+                btn.parentElement.remove();
+                movieDB.movies.splice(i,1);
+                createMovieList(films, parent);
+            });
         });
     }
 
